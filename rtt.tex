@@ -1,0 +1,361 @@
+% Compile with: lualatex documentation.tex
+\documentclass[11pt,a4paper]{article}
+\usepackage{fontspec}
+\usepackage{geometry}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{tcolorbox}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\setmainfont{Linux Libertine O}
+\geometry{margin=1in}
+
+% Color definitions
+\definecolor{codebackground}{RGB}{248,248,248}
+\definecolor{commandcolor}{RGB}{0,102,204}
+\definecolor{commentcolor}{RGB}{102,102,102}
+\definecolor{titlecolor}{RGB}{0,51,102}
+
+% Code listing style
+\lstset{
+  basicstyle=\ttfamily\small,
+  backgroundcolor=\color{codebackground},
+  frame=single,
+  rulecolor=\color{gray!30},
+  numbers=none,
+  breaklines=true,
+  postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},
+  tabsize=2,
+  showstringspaces=false,
+  captionpos=b
+}
+
+% Title formatting
+\titleformat{\section}
+  {\Large\bfseries\color{titlecolor}}
+  {\thesection}{1em}{}
+
+\titleformat{\subsection}
+  {\large\bfseries\color{titlecolor}}
+  {\thesubsection}{1em}{}
+
+% Header and footer
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\textit{File Editor Tool}}
+\fancyhead[R]{\textit{User Manual}}
+\fancyfoot[C]{\thepage}
+
+% Command box environment
+\newtcolorbox{commandbox}[1]{
+  colback=codebackground,
+  colframe=commandcolor,
+  fonttitle=\bfseries,
+  title=#1,
+  arc=2mm
+}
+
+\title{\Huge\bfseries File Editor Tool\\\large Command-Line Text File Manipulation}
+\author{Version 1.0\\Malinga RK}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+\newpage
+
+\section{Introduction}
+
+The File Editor Tool is a command-line utility written in C for viewing and manipulating text files. It provides two distinct operating modes: \textbf{Terminal Mode} (preview only) and \textbf{In-Place Edit Mode} (file modification).
+
+\subsection{Key Features}
+
+\begin{itemize}
+  \item View specific lines or line ranges
+  \item Delete lines from files
+  \item Append text after specific lines
+  \item Replace text throughout files
+  \item Safe preview mode (default)
+  \item In-place editing with \texttt{-i} flag
+\end{itemize}
+
+\section{Operating Modes}
+
+\subsection{Terminal Mode (Default)}
+
+Terminal mode is the \textbf{safe default} operating mode. It displays the result of operations without modifying the original file. This allows you to preview changes before committing them.
+
+\begin{tcolorbox}[colback=yellow!10,colframe=orange!80,title=Safety Feature]
+All modification commands (\texttt{--delete}, \texttt{--append}, \texttt{--replace}) run in preview mode by default. The file is never modified unless the \texttt{-i} flag is explicitly provided.
+\end{tcolorbox}
+
+\subsection{In-Place Edit Mode}
+
+To actually modify files, prefix your command with the \texttt{-i} flag. This mode creates a temporary file, performs the operation, and replaces the original file.
+
+\section{Command Reference}
+
+\subsection{Reading Operations}
+
+These operations always work in terminal mode (read-only).
+
+\subsubsection{View Single Line}
+
+\begin{commandbox}{Syntax}
+\begin{lstlisting}
+./program --line [line_number] [file]
+\end{lstlisting}
+\end{commandbox}
+
+\textbf{Description:} Displays a specific line from the file.
+
+\textbf{Example:}
+\begin{lstlisting}
+./program --line 5 myfile.txt
+\end{lstlisting}
+
+\subsubsection{View Line Range}
+
+\begin{commandbox}{Syntax}
+\begin{lstlisting}
+./program --lines [start,end] [file]
+\end{lstlisting}
+\end{commandbox}
+
+\textbf{Description:} Displays a range of lines with line numbers.
+
+\textbf{Example:}
+\begin{lstlisting}
+./program --lines 10,20 myfile.txt
+\end{lstlisting}
+
+Output format:
+\begin{lstlisting}
+ 10:This is line 10
+ 11:This is line 11
+ 12:This is line 12
+ ...
+\end{lstlisting}
+
+\subsection{Modification Operations}
+
+\subsubsection{Delete Lines}
+
+\begin{commandbox}{Terminal Mode (Preview)}
+\begin{lstlisting}
+./program --delete [start,end] [file]
+\end{lstlisting}
+\end{commandbox}
+
+\begin{commandbox}{In-Place Mode (Modifies File)}
+\begin{lstlisting}
+./program -i --delete [start,end] [file]
+\end{lstlisting}
+\end{commandbox}
+
+\textbf{Description:} Removes the specified line range from the file.
+
+\textbf{Examples:}
+\begin{lstlisting}
+# Preview deletion
+./program --delete 5,10 document.txt
+
+# Actually delete lines 5-10
+./program -i --delete 5,10 document.txt
+\end{lstlisting}
+
+\subsubsection{Append Text}
+
+\begin{commandbox}{Terminal Mode (Preview)}
+\begin{lstlisting}
+./program --append [line_number] [file] "text"
+\end{lstlisting}
+\end{commandbox}
+
+\begin{commandbox}{In-Place Mode (Modifies File)}
+\begin{lstlisting}
+./program -i --append [line_number] [file] "text"
+\end{lstlisting}
+\end{commandbox}
+
+\textbf{Description:} Inserts text as a new line after the specified line number.
+
+\textbf{Examples:}
+\begin{lstlisting}
+# Preview append
+./program --append 3 notes.txt "This is a new line"
+
+# Actually append
+./program -i --append 3 notes.txt "This is a new line"
+\end{lstlisting}
+
+\subsubsection{Replace Text}
+
+\begin{commandbox}{Terminal Mode (Preview)}
+\begin{lstlisting}
+./program --replace "old_text/new_text" [file]
+\end{lstlisting}
+\end{commandbox}
+
+\begin{commandbox}{In-Place Mode (Modifies File)}
+\begin{lstlisting}
+./program -i --replace "old_text/new_text" [file]
+\end{lstlisting}
+\end{commandbox}
+
+\textbf{Description:} Replaces the first occurrence of \texttt{old\_text} with \texttt{new\_text} on each line.
+
+\textbf{Examples:}
+\begin{lstlisting}
+# Preview replacement
+./program --replace "hello/goodbye" letter.txt
+
+# Actually replace
+./program -i --replace "hello/goodbye" letter.txt
+\end{lstlisting}
+
+\section{Usage Examples}
+
+\subsection{Workflow Example}
+
+A typical workflow involves previewing changes before applying them:
+
+\begin{lstlisting}
+# 1. View the current state
+./program --lines 1,50 config.txt
+
+# 2. Preview a deletion
+./program --delete 10,15 config.txt
+
+# 3. If satisfied, apply the change
+./program -i --delete 10,15 config.txt
+
+# 4. Verify the result
+./program --lines 1,50 config.txt
+\end{lstlisting}
+
+\subsection{Batch Operations}
+
+\begin{lstlisting}
+# Preview multiple changes
+./program --delete 5,10 data.txt
+./program --append 20 data.txt "New section header"
+./program --replace "old_version/new_version" data.txt
+
+# Apply all changes
+./program -i --delete 5,10 data.txt
+./program -i --append 20 data.txt "New section header"
+./program -i --replace "old_version/new_version" data.txt
+\end{lstlisting}
+
+\section{Error Handling}
+
+\subsection{Common Errors}
+
+\begin{description}
+  \item[Invalid line number] The specified line number exceeds the total lines in the file.
+  \item[Invalid line range] The start line is greater than the end line, or either exceeds the file length.
+  \item[Cannot open file] The specified file does not exist or lacks read permissions.
+  \item[Cannot create temporary file] Insufficient permissions or disk space for in-place editing.
+\end{description}
+
+\subsection{Error Messages}
+
+\begin{lstlisting}
+invalid line number
+invalid line range
+Invalid range: Operation is not permitted
+Error: Cannot open file
+Error: Cannot create temporary file
+Error: Text to append is required
+Error: Replace format should be "OldText/NewText"
+\end{lstlisting}
+
+\section{Technical Details}
+
+\subsection{Line Numbering}
+
+\begin{itemize}
+  \item Line numbers start at 1 (not 0)
+  \item Line ranges are inclusive: \texttt{5,10} includes both lines 5 and 10
+  \item Maximum line number supported: 999,999,999 (limited by \texttt{unsigned int})
+\end{itemize}
+
+\subsection{Buffer Limitations}
+
+\begin{itemize}
+  \item Maximum line length: 512 characters (including newline)
+  \item Lines exceeding this limit will be processed in chunks
+  \item Maximum line number length in commands: 8 digits
+\end{itemize}
+
+\subsection{File Operations}
+
+\textbf{In-Place Mode Process:}
+\begin{enumerate}
+  \item Read from original file
+  \item Write modified content to \texttt{temp\_file.tmp}
+  \item Close both files
+  \item Remove original file
+  \item Rename temporary file to original filename
+\end{enumerate}
+
+\section{Best Practices}
+
+\subsection{Safety Guidelines}
+
+\begin{itemize}
+  \item Always preview changes with terminal mode first
+  \item Keep backups of important files before using \texttt{-i} mode
+  \item Test operations on sample files before production use
+  \item Use version control systems for critical files
+\end{itemize}
+
+\subsection{Performance Tips}
+
+\begin{itemize}
+  \item For large files, specify exact line ranges rather than reading entire files
+  \item Batch multiple preview operations before applying changes
+  \item Consider file size when performing replace operations
+\end{itemize}
+
+\section{Compilation}
+
+To compile the program:
+
+\begin{lstlisting}[language=bash]
+gcc -o filedit read.c -Wall -Wextra
+\end{lstlisting}
+
+Recommended compilation flags:
+\begin{itemize}
+  \item \texttt{-Wall}: Enable all warnings
+  \item \texttt{-Wextra}: Enable extra warnings
+  \item \texttt{-O2}: Optimization level 2 (optional)
+  \item \texttt{-std=c99}: Use C99 standard (optional)
+\end{itemize}
+
+\section{Quick Reference}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{Command} & \textbf{Mode} & \textbf{Effect} \\
+\hline
+\texttt{--line N file} & Terminal & View line N \\
+\texttt{--lines N,M file} & Terminal & View lines N-M \\
+\texttt{--delete N,M file} & Terminal & Preview deletion \\
+\texttt{-i --delete N,M file} & In-place & Delete lines \\
+\texttt{--append N file "text"} & Terminal & Preview append \\
+\texttt{-i --append N file "text"} & In-place & Append text \\
+\texttt{--replace "a/b" file} & Terminal & Preview replace \\
+\texttt{-i --replace "a/b" file} & In-place & Replace text \\
+\hline
+\end{tabular}
+\caption{Command Quick Reference}
+\end{table}
+
+\end{document}
