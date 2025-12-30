@@ -35,13 +35,13 @@ A sed-inspired command-line utility for viewing and manipulating text files with
 ### Compilation
 
 ```bash
-gcc -o tted read.c -Wall -Wextra
+gcc -o tted rtt.c -Wall -Wextra
 ```
 
 ### Recommended Flags
 
 ```bash
-gcc -o tted read.c -Wall -Wextra -O2 -std=c99
+gcc -o tted rtt.c -Wall -Wextra -O2 -std=c99
 ```
 
 ## Operating Modes
