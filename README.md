@@ -8,13 +8,13 @@ A sed-inspired command-line utility for viewing and manipulating text files with
 
 ## Features
 
-- 📖 **View** specific lines or line ranges
-- ✂️ **Delete** lines from files
-- ➕ **Append** text after specific lines
-- 🔄 **Replace** text throughout files
-- 🛡️ **Safe preview mode** (default)
-- ⚡ **In-place editing** with `-i` flag
-- 🎯 **Sed-inspired** syntax for familiar workflow
+- **View** specific lines or line ranges
+- **Delete** lines from files
+- **Append** text after specific lines
+- **Replace** text throughout files
+- **Safe preview mode** (default)
+- **In-place editing** with `-i` flag
+- **Sed-inspired** syntax for familiar workflow
 
 ## Table of Contents
 
@@ -46,7 +46,7 @@ gcc -o tted rtt.c -Wall -Wextra -O2 -std=c99
 
 ## Operating Modes
 
-### 🔍 Terminal Mode (Default)
+### Terminal Mode (Default)
 
 **Safe preview mode** - Shows what would happen without modifying files.
 
@@ -54,9 +54,9 @@ gcc -o tted rtt.c -Wall -Wextra -O2 -std=c99
 ./tted --delete 5,10 file.txt  # Preview only
 ```
 
-> ⚠️ **Safety First**: All modification commands run in preview mode by default!
+> **Safety First**: All modification commands run in preview mode by default!
 
-### ✏️ In-Place Edit Mode
+### In-Place Edit Mode
 
 **File modification mode** - Actually modifies files using the `-i` flag.
 
