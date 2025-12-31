@@ -4,7 +4,7 @@ A sed-inspired command-line utility for viewing and manipulating text files with
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![C Standard](https://img.shields.io/badge/C-C99-blue.svg)](https://en.wikipedia.org/wiki/C99)
-[![GitHub repo](https://img.shields.io/badge/repo-Tted-blue.svg)](https://github.com/yourusername/Tted)
+[![GitHub repo](https://img.shields.io/badge/repo-Tted-blue.svg)](https://github.com/malinga93142/Tted)
 
 ## Features
 
